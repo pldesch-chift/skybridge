@@ -23,7 +23,7 @@ export function useNodemon(
       : {
           watch: ["src"],
           ext: "ts,json",
-          exec: "tsx src/server.ts",
+          exec: "tsx .skybridge/dev-entry.ts",
         };
 
     nodemon({ ...config, env, stdout: false });

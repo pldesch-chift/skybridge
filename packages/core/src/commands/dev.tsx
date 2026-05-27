@@ -1,5 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { Box, render, Text } from "ink";
+import { emitDevEntry } from "../cli/build-helpers.js";
 import { resolvePort } from "../cli/detect-port.js";
 import { Header } from "../cli/header.js";
 import { resolveViewsDir } from "../cli/resolve-views-dir.js";
@@ -52,6 +53,11 @@ export default class Dev extends Command {
       // view names) tsc may show phantom errors, but the dev server should
       // still start so the developer can fix the underlying issue.
     }
+
+    // Nodemon execs `.skybridge/dev-entry.ts`, which imports the user's
+    // src/server.ts and calls run() when needed — mirrors dist/__entry.js so
+    // templates that only `export default server` still boot a dev server.
+    emitDevEntry(root);
 
     const { port, fallback, envWarning } = await resolvePort(flags.port);
     if (envWarning) {
